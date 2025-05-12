@@ -1,6 +1,6 @@
 
 # 📚 Biblioteca Digital Distribuida – Prueba 2 Sistemas Distribuidos 2025-01
-
+## Integrantes: FABRIZIO FRESARD VALLEJOS, NICOLE NAVARRO AMARO Y SEBASTIÁN VILLARROEL OYARZÚN
 Este repositorio contiene el desarrollo completo de la **Prueba 2** de Sistemas Distribuidos.  
 Está dividido en tres partes funcionales:
 
