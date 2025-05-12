@@ -1,20 +1,20 @@
 {
-  "ciencia ficción": {
+  "ciencia ficcion": {
     "joven": 3,
     "adulto": 2,
     "mayor": 1
   },
-  "programación": {
+  "programacion": {
     "joven": 3,
     "adulto": 3,
     "mayor": 1
   },
-  "fantasía": {
+  "fantasia": {
     "joven": 3,
     "adulto": 2,
     "mayor": 1
   },
-  "química": {
+  "quimica": {
     "joven": 2,
     "adulto": 3,
     "mayor": 2
@@ -24,7 +24,7 @@
     "adulto": 3,
     "mayor": 3
   },
-  "tecnología": {
+  "tecnologia": {
     "joven": 3,
     "adulto": 2,
     "mayor": 1
