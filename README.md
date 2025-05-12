@@ -60,9 +60,11 @@ Esto crea y escucha registros en `logs.csv`.
 
 ---
 
-## ⚙️ PASO 2 – INICIAR SISTEMA DISTRIBUIDO (Parte 1)
+## ⚙️ PASO 2 – INICIAR LOS ESCLAVOS (Parte 1)
 
-Abre **una terminal por cada esclavo**:
+Abre **una terminal por cada esclavo** y ejecuta lo siguiente:
+
+### Paso 2.1 – Esclavo de libros (puerto 5001)
 
 ```powershell
 $env:ARCHIVO_DATOS = "esclavos\libros.json"
@@ -70,11 +72,29 @@ $env:PUERTO = 5001
 python esclavo.py
 ```
 
-Repite para:
+### Paso 2.2 – Esclavo de tesis (puerto 5002)
 
-- `esclavos\tesis.json` → puerto 5002
-- `esclavos\videos.json` → puerto 5003
-- `esclavos\papers.json` → puerto 5004
+```powershell
+$env:ARCHIVO_DATOS = "esclavos\tesis.json"
+$env:PUERTO = 5002
+python esclavo.py
+```
+
+### Paso 2.3 – Esclavo de videos (puerto 5003)
+
+```powershell
+$env:ARCHIVO_DATOS = "esclavos\videos.json"
+$env:PUERTO = 5003
+python esclavo.py
+```
+
+### Paso 2.4 – Esclavo de papers (puerto 5004)
+
+```powershell
+$env:ARCHIVO_DATOS = "esclavos\papers.json"
+$env:PUERTO = 5004
+python esclavo.py
+```
 
 ---
 
