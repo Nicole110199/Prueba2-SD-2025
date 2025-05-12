@@ -1,45 +1,40 @@
-
 # 📚 Biblioteca Digital Distribuida – Manual Completo (Windows PowerShell)
 
 Este proyecto implementa tres partes:
 
 - ✅ **Parte 1:** Sistema distribuido con maestro y esclavos para búsqueda de documentos.
 - ✅ **Parte 2:** Registro de logs centralizado usando RMI (Pyro5).
-- ✅ **Parte 3:** Análisis visual de los logs centralizados.
+- ✅ **Parte 3:** Análisis visual de los logs centralizados mediante gráficos.
 
 ---
 
-## ✅ ¿Qué hace cada parte?
+## 🧠 ¿Qué hace cada parte?
 
 ### Parte 1: Búsqueda distribuida
 - El maestro recibe una consulta (`titulo`, `edad`).
-- Consulta a cada esclavo (libros, tesis, videos, papers).
-- Junta resultados, calcula el score y ordena.
-- Devuelve los documentos más relevantes.
+- Contacta a todos los esclavos (libros, tesis, videos, papers).
+- Junta sus respuestas, calcula el score y entrega resultados ordenados.
 
-### Parte 2: Logging distribuido
-- Cada esclavo y el maestro registran sus operaciones (inicio, fin, tipo, score).
-- Envían los registros vía RMI (Pyro5) a un servidor central.
-- Los logs se guardan en `logs.csv`.
+### Parte 2: Logging centralizado
+- Cada nodo (esclavo y maestro) registra la búsqueda: hora, tipo, tiempo, score, grupo etario.
+- Los registros se envían a un servidor de logs vía RMI (Pyro5) y se guardan en `logs.csv`.
 
-### Parte 3: Análisis visual
-- Se grafican los logs registrados: por grupo etario, tiempos, latencia, tamaño de respuestas, etc.
+### Parte 3: Análisis gráfico
+- Permite visualizar la información registrada en los logs: distribución etaria, scores, tiempos, etc.
 
 ---
 
-## 📦 Archivos de configuración importantes (carpeta `/config`)
+## 📦 Archivos de configuración esenciales (`/config`)
 
-| Archivo | Contenido | Función |
-|--------|-----------|---------|
-| `esclavos_config.json` | Dirección y puerto de cada esclavo | El maestro usa esto para reenviar consultas |
-| `rango_etario.json` | Define rangos de edad (joven, adulto, mayor) | Se usa para clasificar al usuario |
-| `intereses_por_categoria.json` | Puntajes por categoría y grupo etario | Se usa para calcular el score |
+| Archivo | Contenido | Para qué sirve |
+|--------|-----------|----------------|
+| `esclavos_config.json` | Puertos y hosts de cada esclavo | Lo usa el maestro para enrutar consultas |
+| `rango_etario.json` | Define rangos como joven, adulto, mayor | Clasifica usuarios según edad |
+| `intereses_por_categoria.json` | Puntaje por categoría y edad | Se usa para calcular el `score` |
 
 ---
 
-## ⚙️ PASO 0 – INSTALAR DEPENDENCIAS (una sola vez)
-
-En PowerShell dentro de la carpeta del proyecto:
+## ✅ PASO 0 – INSTALAR DEPENDENCIAS (una sola vez)
 
 ```powershell
 pip install flask requests Pyro5 matplotlib pandas seaborn
@@ -47,35 +42,27 @@ pip install flask requests Pyro5 matplotlib pandas seaborn
 
 ---
 
-## 🔌 PASO 1 – INICIAR EL SISTEMA DE LOGS (Parte 2)
+## 🔌 PASO 1 – INICIAR SISTEMA DE LOGS (Parte 2)
 
-### Paso 1.1 – Iniciar el servidor de nombres Pyro5
+### 1.1 Servidor de nombres Pyro5
 
 ```powershell
 python -m Pyro5.nameserver
 ```
 
-Mantén esta terminal abierta.
-
----
-
-### Paso 1.2 – Iniciar el servidor de logs
-
-En otra terminal:
+### 1.2 Servidor centralizado de logs
 
 ```powershell
 python log_sv.py
 ```
 
-Esto empezará a recibir y guardar los logs en `logs.csv`.
+Esto crea y escucha registros en `logs.csv`.
 
 ---
 
-## 🧠 PASO 2 – INICIAR LOS ESCLAVOS (Parte 1)
+## ⚙️ PASO 2 – INICIAR SISTEMA DISTRIBUIDO (Parte 1)
 
-Abre **una terminal por cada esclavo** y ejecuta lo siguiente:
-
-### Paso 2.1 – Esclavo de libros (puerto 5001)
+Abre **una terminal por cada esclavo**:
 
 ```powershell
 $env:ARCHIVO_DATOS = "esclavos\libros.json"
@@ -83,89 +70,37 @@ $env:PUERTO = 5001
 python esclavo.py
 ```
 
-### Paso 2.2 – Esclavo de tesis (puerto 5002)
+Repite para:
 
-```powershell
-$env:ARCHIVO_DATOS = "esclavos\tesis.json"
-$env:PUERTO = 5002
-python esclavo.py
-```
-
-### Paso 2.3 – Esclavo de videos (puerto 5003)
-
-```powershell
-$env:ARCHIVO_DATOS = "esclavos\videos.json"
-$env:PUERTO = 5003
-python esclavo.py
-```
-
-### Paso 2.4 – Esclavo de papers (puerto 5004)
-
-```powershell
-$env:ARCHIVO_DATOS = "esclavos\papers.json"
-$env:PUERTO = 5004
-python esclavo.py
-```
+- `esclavos\tesis.json` → puerto 5002
+- `esclavos\videos.json` → puerto 5003
+- `esclavos\papers.json` → puerto 5004
 
 ---
 
-## 🔁 PASO 3 – INICIAR EL MAESTRO
-
-En otra terminal PowerShell:
+### 2.5 Iniciar el maestro
 
 ```powershell
 python maestro.py
 ```
 
-✅ El maestro recibirá las consultas, contactará a los esclavos y devolverá los resultados ordenados.
-
 ---
 
-## 🌐 PASO 4 – REALIZAR CONSULTAS DESDE EL NAVEGADOR
+## 🌐 PASO 3 – REALIZAR CONSULTAS (Parte 1 + Parte 2)
 
-Abre tu navegador web y prueba:
+Ejecuta consultas desde el navegador como:
 
-```url
-http://localhost:5000/query?titulo=historia+futuro&edad=30
+```
+http://localhost:5000/query?titulo=historia&edad=30
 ```
 
-Puedes cambiar `titulo` y `edad` libremente.
+✅ Cada consulta será procesada por todos los esclavos y registrada como log en `logs.csv`.
 
 ---
 
-## 🧾 PASO 5 – VER LOS LOGS CENTRALIZADOS (Parte 2)
+## 🧪 PASO 4 – HACER VARIAS CONSULTAS PARA POBLAR LOS LOGS
 
-En una nueva terminal PowerShell:
-
-```powershell
-python log_client.py
-```
-
-Esto te mostrará las entradas en `logs.csv` generadas por esclavos y maestro.
-
----
-
-## 📊 PASO 6 – VER GRÁFICOS ESTADÍSTICOS (Parte 3)
-
-En otra terminal:
-
-```powershell
-python aggregate.py
-```
-
-Luego selecciona una opción del menú:
-
-1. Torta por rango etario  
-2. Score promedio en el tiempo  
-3. Tiempos de respuesta por esclavo  
-4. Latencia de red  
-5. Tamaño por hora
-
----
-
-## 🧪 PASO 7 – CONSULTAS DE PRUEBA RECOMENDADAS
-
-Realiza estas consultas desde el navegador para poblar los logs con datos variados:
+Realiza al menos 5 consultas variadas como estas:
 
 ```
 http://localhost:5000/query?titulo=historia&edad=30
@@ -175,9 +110,39 @@ http://localhost:5000/query?titulo=ficcion&edad=40
 http://localhost:5000/query?titulo=programacion&edad=25
 ```
 
+✅ Esto permitirá tener datos suficientes para los gráficos de la Parte 3.
+
 ---
 
-## 📂 ESTRUCTURA ESPERADA DEL PROYECTO
+## 📄 PASO 5 – VER LOS LOGS REGISTRADOS (Parte 2)
+
+```powershell
+python log_client.py
+```
+
+Esto imprimirá las líneas registradas en `logs.csv`.
+
+---
+
+## 📊 PASO 6 – ANALIZAR LOGS CON GRÁFICOS (Parte 3)
+
+```powershell
+python aggregate.py
+```
+
+Y selecciona una opción:
+
+1. Torta por rango etario  
+2. Score promedio en el tiempo  
+3. Tiempos de respuesta por esclavo  
+4. Latencia red  
+5. Tamaño por hora
+
+✅ Estos gráficos solo funcionarán bien si realizaste suficientes consultas antes.
+
+---
+
+## 📂 ESTRUCTURA DEL PROYECTO
 
 ```
 biblioteca_distribuida/
