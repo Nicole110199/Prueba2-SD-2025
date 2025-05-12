@@ -1,6 +1,13 @@
 
 import json
 import re
+import unicodedata
+
+def normalizar(texto):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', texto)
+        if unicodedata.category(c) != 'Mn'
+    ).lower()
 
 def cargar_configuracion(ruta_rango, ruta_intereses):
     with open(ruta_rango, 'r', encoding='utf-8') as f:
@@ -16,12 +23,12 @@ def determinar_grupo_etario(edad, rangos):
     return None
 
 def calcular_puntaje(documento, palabras_clave, grupo_etario, intereses):
-    titulo = documento.get("titulo", "").lower()
-    coincidencias = sum(1 for palabra in palabras_clave if palabra in titulo)
-    categoria = documento.get("categoria", "").lower()
+    titulo = normalizar(documento.get("titulo", ""))
+    titulo_palabras = titulo.split()
+    coincidencias = sum(1 for palabra in palabras_clave if palabra in titulo_palabras)
+    categoria = normalizar(documento.get("categoria", ""))
     puntaje_categoria = intereses.get(categoria, {}).get(grupo_etario, 0)
 
-    # NUEVA FÓRMULA CORREGIDA
     score = coincidencias * 10 + puntaje_categoria
 
     return {
@@ -32,7 +39,7 @@ def calcular_puntaje(documento, palabras_clave, grupo_etario, intereses):
     }
 
 def aplicar_ranking(documentos, consulta_titulo, edad, rangos, intereses):
-    palabras_clave = [p.lower() for p in re.split(r"[\s+]", consulta_titulo) if p.strip()]
+    palabras_clave = [normalizar(p) for p in re.split(r"[\s+]", consulta_titulo) if p.strip()]
     grupo_etario = determinar_grupo_etario(edad, rangos) if edad is not None else None
 
     resultados = []
@@ -40,7 +47,9 @@ def aplicar_ranking(documentos, consulta_titulo, edad, rangos, intereses):
         if grupo_etario:
             resultado = calcular_puntaje(doc, palabras_clave, grupo_etario, intereses)
         else:
-            coincidencias = sum(1 for palabra in palabras_clave if palabra in doc.get("titulo", "").lower())
+            titulo = normalizar(doc.get("titulo", ""))
+            titulo_palabras = titulo.split()
+            coincidencias = sum(1 for palabra in palabras_clave if palabra in titulo_palabras)
             resultado = {
                 "documento": doc,
                 "score": coincidencias * 10,
