@@ -64,6 +64,8 @@ pip install flask requests Pyro5 matplotlib pandas seaborn
 
 ### 2.1 Servidor de nombres Pyro5
 
+Abre **una nueva terminal** y ejecuta lo siguiente:
+
 ```powershell
 python -m Pyro5.nameserver
 ```
