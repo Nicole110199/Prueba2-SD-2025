@@ -1,4 +1,4 @@
-# 📚 Biblioteca Digital Distribuida – Manual Completo (Windows PowerShell)
+# 📚 Biblioteca Digital Distribuida
 
 Este proyecto implementa tres partes:
 
