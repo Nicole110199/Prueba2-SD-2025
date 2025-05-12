@@ -52,11 +52,7 @@ Prueba2-SD-2025-main/
 
 ## ✅ PASO 1 – INSTALAR DEPENDENCIAS (una sola vez)
 
-```powershell
-pip install -r requirements.txt
-```
-
-O directamente:
+Abre **una nueva terminal** y ejecuta lo siguiente:
 
 ```powershell
 pip install flask requests Pyro5 matplotlib pandas seaborn
@@ -73,6 +69,8 @@ python -m Pyro5.nameserver
 ```
 
 ### 2.2 Servidor de logs
+
+Abre **una nueva terminal** y ejecuta lo siguiente:
 
 ```powershell
 python log_sv.py
@@ -131,7 +129,7 @@ python maestro.py
 Abre tu navegador:
 
 ```
-http://localhost:5000/query?titulo=historia&edad=30
+http://localhost:5000/query?titulo=historia+codigo&edad=30
 ```
 
 ✅ El maestro envía la consulta a todos los esclavos, calcula el score y registra el log.
@@ -143,14 +141,18 @@ http://localhost:5000/query?titulo=historia&edad=30
 Ejecuta al menos 5 consultas diferentes como:
 
 ```
-http://localhost:5000/query?titulo=leyenda&edad=27
-http://localhost:5000/query?titulo=codigo+historia&edad=35
-http://localhost:5000/query?titulo=quimica&edad=20
+http://localhost:5000/query?titulo=tecnologia+programacion&edad=25
+http://localhost:5000/query?titulo=tecnologia+programacion&edad=25
+http://localhost:5000/query?titulo=origen&edad=60
+http://localhost:5000/query?titulo=descubrimiento+del+futuro&edad=45
+
 ```
 
 ---
 
 ## 📊 PASO 7 – VER GRÁFICOS ESTADÍSTICOS (Parte 3)
+
+Abre **una nueva terminal** y ejecuta lo siguiente:
 
 ```powershell
 python aggregate.py
