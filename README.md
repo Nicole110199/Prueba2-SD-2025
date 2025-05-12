@@ -141,8 +141,11 @@ http://localhost:5000/query?titulo=historia+codigo&edad=30
 Ejecuta al menos 5 consultas diferentes como:
 
 ```
+http://localhost:5000/query?titulo=historia+codigo&edad=30
 http://localhost:5000/query?titulo=tecnologia+programacion&edad=25
-http://localhost:5000/query?titulo=tecnologia+programacion&edad=25
+http://localhost:5000/query?titulo=origen&edad=25
+http://localhost:5000/query?titulo=descubrimiento+del+futuro&edad=20
+http://localhost:5000/query?titulo=ficcion+leyenda&edad=35
 http://localhost:5000/query?titulo=origen&edad=60
 http://localhost:5000/query?titulo=descubrimiento+del+futuro&edad=45
 
